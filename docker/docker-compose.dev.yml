@@ -8,6 +8,7 @@ services:
 
   devcms:
     build: ..
+    user: "0:0"
     depends_on:
       - "devdb"
     environment:
