@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
-      - "../.dev/postgres-data:/var/lib/postgresql/data"
+      - "devdb_data:/var/lib/postgresql/data"
 
   devcms:
     build: ..
@@ -17,9 +17,11 @@ services:
       - "..:/home/cmsuser/src"
     privileged: true
     cgroup: host
-    command: >
-      wait-for-it devdb:5432 -- bash
+    command: ["tail", "-f", "/dev/null"]
     ports:
       - 8888:8888
       - 8889:8889
       - 8890:8890
+
+volumes:
+  devdb_data:
