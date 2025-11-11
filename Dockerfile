@@ -28,6 +28,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libpq-dev
         libyaml-dev
         mono-mcs
+        nginx
+        nano
         php-cli
         postgresql-client
         pypy3
