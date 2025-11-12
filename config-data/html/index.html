@@ -5,39 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เลือกการแข่งขัน | Contest Selector</title>
   <style>
+    :root {
+      --main-red: #d9463e;
+      --light-red: #fff5f5;
+      --border-red: #f1c4c4;
+      --hover-red: #ffe8e8;
+      --text-red: #c7372c;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background: #f5f6fa;
+      background: #fafafa;
       margin: 0;
-      padding: 40px 0;
+      padding: 40px 0 80px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #333;
+      color: #2b2b2b;
+      min-height: 100vh;
+      position: relative;
     }
 
     h1 {
       font-size: 2rem;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-weight: 600;
-      color: #2f3640;
+      color: var(--main-red);
+      letter-spacing: 0.5px;
     }
 
     .container {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      padding: 20px 30px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 28px rgba(217, 70, 62, 0.08);
+      padding: 25px 30px;
       width: 90%;
       max-width: 480px;
+      border-top: 5px solid var(--main-red);
+      transition: transform 0.2s;
+    }
+
+    .container:hover {
+      transform: translateY(-2px);
     }
 
     .group {
-      margin-bottom: 10px;
+      margin-bottom: 16px;
       border-radius: 12px;
       overflow: hidden;
-      background: #f9fafc;
-      border: 1px solid #e6e9ef;
+      background: var(--light-red);
+      border: 1px solid var(--border-red);
+      transition: box-shadow 0.25s;
+    }
+
+    .group:hover {
+      box-shadow: 0 3px 12px rgba(217, 70, 62, 0.12);
     }
 
     .group-header {
@@ -48,12 +70,13 @@
       padding: 14px 18px;
       font-weight: 500;
       font-size: 1.1rem;
-      background: #ffffff;
-      transition: background 0.25s;
+      background: #fff;
+      color: var(--text-red);
+      transition: background 0.25s, color 0.25s;
     }
 
     .group-header:hover {
-      background: #f1f3f6;
+      background: var(--hover-red);
     }
 
     .arrow {
@@ -67,10 +90,10 @@
     .contest-list {
       display: none;
       flex-direction: column;
-      background: #f9fafc;
-      padding-left: 10px;
-      border-top: 1px solid #e6e9ef;
+      background: var(--light-red);
+      border-top: 1px solid var(--border-red);
       animation: fadeIn 0.25s ease;
+      overflow: hidden; 
     }
 
     .group.open .contest-list {
@@ -78,35 +101,48 @@
     }
 
     .contest {
-      padding: 10px 18px;
+      padding: 15px 18px;
       text-decoration: none;
       color: #333;
       border-radius: 8px;
       transition: background 0.25s, transform 0.1s;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
+      
     }
 
     .contest:hover {
-      background: #eef1f7;
+      background: var(--hover-red);
       transform: translateX(3px);
     }
 
     .admin-link {
       display: block;
       text-align: center;
-      margin-top: 25px;
-      padding: 10px 0;
+      margin: 16px 18px 18px 18px;
+      padding: 9px 0;
       border-radius: 8px;
-      background: #2f3640;
-      color: white;
+      background: #f6f6f6;
+      color: #999;
       text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s, transform 0.15s;
+      font-weight: 400;
+      font-size: 0.9rem;
+      border: 1px solid #e5e5e5;
+      transition: background 0.3s, color 0.3s;
     }
 
     .admin-link:hover {
-      background: #414b57;
-      transform: translateY(-2px);
+      background: #ececec;
+      color: #666;
+    }
+
+    .credit {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.75rem;
+      color: #aaa;
+      text-align: center;
+      letter-spacing: 0.3px;
+      user-select: none;
     }
 
     @keyframes fadeIn {
@@ -122,39 +158,29 @@
 
     <div class="group">
       <div class="group-header" onclick="toggleGroup(this)">
-        ม.1 <span class="arrow">▶</span>
-      </div>
-      <div class="contest-list">
-        <a class="contest" href="/m1-term1/">เทอม 1</a>
-        <a class="contest" href="/m1-term2/">เทอม 2</a>
-        <a class="contest" href="/m1-exam/">สอบ</a>
-      </div>
-    </div>
-
-    <div class="group">
-      <div class="group-header" onclick="toggleGroup(this)">
         ม.2 <span class="arrow">▶</span>
       </div>
       <div class="contest-list">
-        <a class="contest" href="/m2-term1/">เทอม 1</a>
-        <a class="contest" href="/m2-term2/">เทอม 2</a>
-        <a class="contest" href="/m2-exam/">สอบ</a>
+        <a class="contest" href="/m2-term1/">Term 1</a>
+        <a class="contest" href="/m2-mid-exam/">Midterm Exam</a>
+        <a class="contest" href="/m2-exam/">Final Exam</a>
       </div>
     </div>
 
     <div class="group">
       <div class="group-header" onclick="toggleGroup(this)">
-        ม.3 <span class="arrow">▶</span>
+        TEACHER_ONLY <span class="arrow">▶</span>
       </div>
       <div class="contest-list">
-        <a class="contest" href="/m3-term1/">เทอม 1</a>
-        <a class="contest" href="/m3-term2/">เทอม 2</a>
-        <a class="contest" href="/m3-exam/">สอบ</a>
+        <a class="contest" href="/teacher-test-contest-1/">Test contest 1</a>
+        
+        <a href="/admin/" class="admin-link">เข้าสู่ระบบแอดมิน</a>
       </div>
     </div>
 
-    <a href="/admin/" class="admin-link">เข้าสู่ระบบแอดมิน</a>
   </div>
+
+  <div class="credit">Created by Phatthanaphon</div>
 
   <script>
     function toggleGroup(el) {
@@ -164,4 +190,3 @@
   </script>
 </body>
 </html>
-
