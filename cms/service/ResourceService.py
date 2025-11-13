@@ -253,23 +253,29 @@ class ResourceService(Service):
                 logger.info("Restarting (%s, %s)...",
                             service.name, service.shard)
                 command = os.path.join(BIN_PATH, "cms%s" % service.name)
+
+                MAX_AUTO_MAPPED_CONTESTS = 10
+
+
                 args = [command, "%d" % service.shard]
 
                 contest_specific_services = ["ContestWebServer", "ProxyService", "EvaluationService"]
 
                 if self.contest_id is not None:
                     if service.name in contest_specific_services:
-                        # ถ้าเป็น Service ที่ต้องผูก Contest (CWS, PS, ES)
-                        # ให้คำนวณ Contest ID จาก Shard ID (Shard 0 -> Contest 1, Shard 1 -> Contest 2, ...)
-                        derived_contest_id = service.shard + 1
-                        logger.info("Auto-mapping %s Shard %d to Contest ID %d (ignoring admin-selected ID %d)",
-                                    service.name, service.shard, derived_contest_id, self.contest_id)
-                        args += ["-c", str(derived_contest_id)]
-                    else:
-                        # ถ้าเป็น Service ทั่วไป (Worker, Checker) ให้ใช้ ID ที่เลือกมา (ถึงแม้จะไม่ได้ใช้ก็ตาม)
-                        logger.debug("Restarting non-contest service %s using admin-selected ID %d",
-                                     service.name, self.contest_id)
-                        args += ["-c", str(self.contest_id)]
+                        
+                        # *** ตรวจสอบว่า Shard ID อยู่ในขอบเขตที่เรามี Contest หรือไม่ ***
+                        if service.shard < MAX_AUTO_MAPPED_CONTESTS:
+                            derived_contest_id = service.shard + 1
+                            logger.info("Auto-mapping %s Shard %d to Contest ID %d (ignoring admin-selected ID %d)",
+                                        service.name, service.shard, derived_contest_id, self.contest_id)
+                            args += ["-c", str(derived_contest_id)]
+                        else:
+                            # *** ถ้า Shard ID เกิน (เช่น Shard 4, 5, ...) ให้ข้ามไปเลย (continue) ***
+                            #logger.warning("Skipping %s Shard %d: No auto-map contest ID available (Max: %d)",
+                            #               service.name, service.shard, MAX_AUTO_MAPPED_CONTESTS)
+                            #time.sleep(0.5)
+                            continue # <-- นี่คือส่วนที่สำคัญที่สุด: สั่งให้ข้ามการ Restart
                 else:
                     args += ["-c", "ALL"]
                 try:

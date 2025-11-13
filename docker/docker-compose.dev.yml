@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
-      - "devdb_data:/var/lib/postgresql/data"
+      - "./pg_data:/var/lib/postgresql/data"
 
   devcms:
     build: ..
@@ -31,5 +31,5 @@ services:
     ports:
       - 8888:80
 
-volumes:
-  devdb_data:
+#volumes:
+#  devdb_data:

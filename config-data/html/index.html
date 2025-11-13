@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>เลือกการแข่งขัน | Contest Selector</title>
+  <title>Contest Selector | เลือกการแข่งขัน</title>
   <style>
     :root {
       --main-red: #d9463e;
@@ -49,8 +49,8 @@
       transform: translateY(-2px);
     }
 
-    .group {
-      margin-bottom: 16px;
+    .group, .subgroup {
+      margin-bottom: 14px;
       border-radius: 12px;
       overflow: hidden;
       background: var(--light-red);
@@ -58,24 +58,24 @@
       transition: box-shadow 0.25s;
     }
 
-    .group:hover {
+    .group:hover, .subgroup:hover {
       box-shadow: 0 3px 12px rgba(217, 70, 62, 0.12);
     }
 
-    .group-header {
+    .group-header, .subgroup-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       padding: 14px 18px;
       font-weight: 500;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       background: #fff;
       color: var(--text-red);
       transition: background 0.25s, color 0.25s;
     }
 
-    .group-header:hover {
+    .group-header:hover, .subgroup-header:hover {
       background: var(--hover-red);
     }
 
@@ -83,36 +83,42 @@
       transition: transform 0.3s;
     }
 
-    .group.open .arrow {
+    .group.open > .group-header .arrow,
+    .subgroup.open > .subgroup-header .arrow {
       transform: rotate(90deg);
     }
 
-    .contest-list {
+    .contest-list, .subcontest-list {
       display: none;
       flex-direction: column;
       background: var(--light-red);
       border-top: 1px solid var(--border-red);
       animation: fadeIn 0.25s ease;
-      overflow: hidden; 
+      overflow: hidden;
     }
 
-    .group.open .contest-list {
+    .group.open > .contest-list,
+    .subgroup.open > .subcontest-list {
       display: flex;
     }
 
     .contest {
-      padding: 15px 18px;
+      padding: 12px 20px;
       text-decoration: none;
       color: #333;
-      border-radius: 8px;
       transition: background 0.25s, transform 0.1s;
       font-size: 0.95rem;
-      
     }
 
     .contest:hover {
       background: var(--hover-red);
       transform: translateX(3px);
+    }
+
+    /* --- ย่อหน้าให้ subgroup ดูแยกจาก group หลัก --- */
+    .subgroup {
+      margin: 10px 15px;
+      background: #fffafa;
     }
 
     .admin-link {
@@ -152,40 +158,85 @@
   </style>
 </head>
 <body>
-  <h1>เลือกการแข่งขัน</h1>
+  <h1>Choose the contests</h1>
 
   <div class="container">
 
+    <!-- Group ม.1 -->
+    <div class="group">
+      <div class="group-header" onclick="toggleGroup(this)">
+        ม.1 <span class="arrow">▶</span>
+      </div>
+      <div class="contest-list">
+
+        <!-- Subgroup เทอม 1 -->
+        <div class="subgroup">
+          <div class="subgroup-header" onclick="toggleGroup(this)">
+            เทอม 1 <span class="arrow">▶</span>
+          </div>
+          <div class="subcontest-list">
+            <a class="contest" target="_blank" href="/m1-t1-work/">งาน</a>
+            <a class="contest" target="_blank" href="/m1-t1-mid/">กลางภาค</a>
+            <a class="contest" target="_blank" href="/m1-t1-final/">ปลายภาค</a>
+          </div>
+        </div>
+
+        <!-- Subgroup เทอม 2 -->
+        <div class="subgroup">
+          <div class="subgroup-header" onclick="toggleGroup(this)">
+            เทอม 2 <span class="arrow">▶</span>
+          </div>
+          <div class="subcontest-list">
+            <a class="contest" target="_blank" href="/m1-t2-work/">งาน</a>
+            <a class="contest" target="_blank" href="/m1-t2-mid/">กลางภาค</a>
+            <a class="contest" target="_blank" href="/m1-t2-final/">ปลายภาค</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Group ม.2 -->
     <div class="group">
       <div class="group-header" onclick="toggleGroup(this)">
         ม.2 <span class="arrow">▶</span>
       </div>
       <div class="contest-list">
-        <a class="contest" href="/m2-term1/">Term 1</a>
-        <a class="contest" href="/m2-mid-exam/">Midterm Exam</a>
-        <a class="contest" href="/m2-exam/">Final Exam</a>
+
+        <!-- Subgroup เทอม 1 -->
+        <div class="subgroup">
+          <div class="subgroup-header" onclick="toggleGroup(this)">
+            เทอม 1 <span class="arrow">▶</span>
+          </div>
+          <div class="subcontest-list">
+            <a class="contest" target="_blank" href="/m2-t1-work/">งาน</a>
+            <a class="contest" target="_blank" href="/m2-t1-mid/">กลางภาค</a>
+            <a class="contest" target="_blank" href="/m2-t1-final/">ปลายภาค</a>
+          </div>
+        </div>
+
       </div>
     </div>
 
+    <!-- Group Teacher -->
     <div class="group">
       <div class="group-header" onclick="toggleGroup(this)">
         TEACHER_ONLY <span class="arrow">▶</span>
       </div>
       <div class="contest-list">
-        <a class="contest" href="/teacher-test-contest-1/">Test contest 1</a>
-        
-        <a href="/admin/" class="admin-link">เข้าสู่ระบบแอดมิน</a>
+        <a class="contest" target="_blank" href="/teacher-only/">TEACHER_ONLY</a>
+        <a href="/admin/" target="_blank" class="admin-link">เข้าสู่ระบบแอดมิน</a>
       </div>
     </div>
 
   </div>
 
-  <div class="credit">Created by Phatthanaphon</div>
+  <div class="credit">Created by Phatthanaphon Sutham</div>
 
   <script>
     function toggleGroup(el) {
-      const group = el.parentElement;
-      group.classList.toggle("open");
+      const parent = el.parentElement;
+      parent.classList.toggle("open");
     }
   </script>
 </body>
