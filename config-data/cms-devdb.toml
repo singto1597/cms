@@ -49,7 +49,17 @@ EvaluationService = [
     ["localhost", 25006],
     ["localhost", 25007],
     ["localhost", 25008],
-    ["localhost", 25009]
+    ["localhost", 25009],
+    ["localhost", 25010],
+    ["localhost", 25011],
+    ["localhost", 25012],
+    ["localhost", 25013],
+    ["localhost", 25014],
+    ["localhost", 25015],
+    ["localhost", 25016],
+    ["localhost", 25017],
+    ["localhost", 25018],
+    ["localhost", 25019]
 ]
 Worker = [
     ["localhost", 26000],
@@ -68,6 +78,11 @@ Worker = [
     ["localhost", 26013],
     ["localhost", 26014],
     ["localhost", 26015],
+    ["localhost", 26016],
+    ["localhost", 26017],
+    ["localhost", 26018],
+    ["localhost", 26019],
+    ["localhost", 26020]
 ]
 ContestWebServer = [
     ["localhost", 21000],
@@ -79,7 +94,17 @@ ContestWebServer = [
     ["localhost", 21006],
     ["localhost", 21007],
     ["localhost", 21008],
-    ["localhost", 21009]
+    ["localhost", 21009],
+    ["localhost", 21010],
+    ["localhost", 21011],
+    ["localhost", 21012],
+    ["localhost", 21013],
+    ["localhost", 21014],
+    ["localhost", 21015],
+    ["localhost", 21016],
+    ["localhost", 21017],
+    ["localhost", 21018],
+    ["localhost", 21019]
 ]
 AdminWebServer = [["localhost", 21100]]
 ProxyService = [
@@ -93,6 +118,16 @@ ProxyService = [
     ["localhost", 28607],
     ["localhost", 28608],
     ["localhost", 28609],
+    ["localhost", 28610],
+    ["localhost", 28611],
+    ["localhost", 28612],
+    ["localhost", 28613],
+    ["localhost", 28614],
+    ["localhost", 28615],
+    ["localhost", 28616],
+    ["localhost", 28617],
+    ["localhost", 28618],
+    ["localhost", 28619]
 ]
 PrintingService = [["localhost", 25123]]
 PrometheusExporter = []
@@ -163,9 +198,19 @@ listen_address = [
     "127.0.0.1", 
     "127.0.0.1", 
     "127.0.0.1", 
+    "127.0.0.1",
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
+    "127.0.0.1", 
     "127.0.0.1"
 ]
-listen_port = [9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510]
+listen_port = [9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, 9520]
 
 # Login cookie duration in seconds. The duration is refreshed on every
 # manual request.

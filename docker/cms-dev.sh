@@ -3,7 +3,7 @@ set -x
 
 GIT_BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD | tr A-Z a-z)
 PROJECT_NAME="cms-$GIT_BRANCH_NAME"
-COMPOSE_FILE="docker/docker-compose.dev.yml"
+COMPOSE_FILE="./docker-compose.dev.yml"
 
 
 echo "Starting containers in detached mode: $PROJECT_NAME"

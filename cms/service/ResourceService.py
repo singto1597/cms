@@ -254,7 +254,7 @@ class ResourceService(Service):
                             service.name, service.shard)
                 command = os.path.join(BIN_PATH, "cms%s" % service.name)
 
-                MAX_AUTO_MAPPED_CONTESTS = 10
+                MAX_AUTO_MAPPED_CONTESTS = 30
 
 
                 args = [command, "%d" % service.shard]
@@ -274,7 +274,7 @@ class ResourceService(Service):
                             # *** ถ้า Shard ID เกิน (เช่น Shard 4, 5, ...) ให้ข้ามไปเลย (continue) ***
                             #logger.warning("Skipping %s Shard %d: No auto-map contest ID available (Max: %d)",
                             #               service.name, service.shard, MAX_AUTO_MAPPED_CONTESTS)
-                            #time.sleep(0.5)
+                            time.sleep(1)
                             continue # <-- นี่คือส่วนที่สำคัญที่สุด: สั่งให้ข้ามการ Restart
                 else:
                     args += ["-c", "ALL"]
