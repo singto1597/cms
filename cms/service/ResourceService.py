@@ -270,6 +270,7 @@ class ResourceService(Service):
                             logger.info("Auto-mapping %s Shard %d to Contest ID %d (ignoring admin-selected ID %d)",
                                         service.name, service.shard, derived_contest_id, self.contest_id)
                             args += ["-c", str(derived_contest_id)]
+                            time.sleep(1)
                         else:
                             # *** ถ้า Shard ID เกิน (เช่น Shard 4, 5, ...) ให้ข้ามไปเลย (continue) ***
                             #logger.warning("Skipping %s Shard %d: No auto-map contest ID available (Max: %d)",
