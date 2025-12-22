@@ -40,6 +40,9 @@ from gevent import subprocess
 from cms import config, get_safe_shard, ServiceCoord
 from cms.io import Service, rpc_method
 
+from cms.db import SessionGen, Contest
+from sqlalchemy import select
+
 
 logger = logging.getLogger(__name__)
 
@@ -250,11 +253,12 @@ class ResourceService(Service):
             if proc is None or not proc.is_running():
                 # We give contest_id even if the service doesn't need
                 # it, since it causes no trouble.
+
+                active_contest_ids = self._get_active_contest_ids()
+
                 logger.info("Restarting (%s, %s)...",
                             service.name, service.shard)
                 command = os.path.join(BIN_PATH, "cms%s" % service.name)
-
-                MAX_AUTO_MAPPED_CONTESTS = 30
 
 
                 args = [command, "%d" % service.shard]
@@ -263,20 +267,15 @@ class ResourceService(Service):
 
                 if self.contest_id is not None:
                     if service.name in contest_specific_services:
+                        target_contest_id = service.shard + 1 
                         
-                        # *** ตรวจสอบว่า Shard ID อยู่ในขอบเขตที่เรามี Contest หรือไม่ ***
-                        if service.shard < MAX_AUTO_MAPPED_CONTESTS:
-                            derived_contest_id = service.shard + 1
-                            logger.info("Auto-mapping %s Shard %d to Contest ID %d (ignoring admin-selected ID %d)",
-                                        service.name, service.shard, derived_contest_id, self.contest_id)
-                            args += ["-c", str(derived_contest_id)]
-                            time.sleep(1)
+                        # *** ตรวจสอบว่า target_contest_id มีอยู่จริงใน Database หรือไม่ ***
+                        if target_contest_id in active_contest_ids:
+                            logger.info("Auto-mapping %s Shard %d to Active Contest ID %d",
+                                        service.name, service.shard, target_contest_id)
+                            args += ["-c", str(target_contest_id)]
                         else:
-                            # *** ถ้า Shard ID เกิน (เช่น Shard 4, 5, ...) ให้ข้ามไปเลย (continue) ***
-                            #logger.warning("Skipping %s Shard %d: No auto-map contest ID available (Max: %d)",
-                            #               service.name, service.shard, MAX_AUTO_MAPPED_CONTESTS)
-                            time.sleep(1)
-                            continue # <-- นี่คือส่วนที่สำคัญที่สุด: สั่งให้ข้ามการ Restart
+                            continue
                 else:
                     args += ["-c", "ALL"]
                 try:
@@ -500,3 +499,13 @@ class ResourceService(Service):
                     service.name, service.shard, self._will_restart[service])
 
         return self._will_restart[service]
+    def _get_active_contest_ids(self):
+        """ดึง ID ของการแข่งขันทั้งหมดที่มีอยู่ในระบบจาก Database"""
+        try:
+            with SessionGen() as session:
+                query = select(Contest.id)
+                contest_ids = session.execute(query).scalars().all()
+                return set(contest_ids)
+        except Exception as e:
+            logger.error("Failed to fetch contest IDs from DB: %s", e)
+            return set()
