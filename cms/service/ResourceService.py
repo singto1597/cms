@@ -503,9 +503,9 @@ class ResourceService(Service):
         """ดึง ID ของการแข่งขันทั้งหมดที่มีอยู่ในระบบจาก Database"""
         try:
             with SessionGen() as session:
-                query = select(Contest.id)
-                contest_ids = session.execute(query).scalars().all()
-                return set(contest_ids)
+                contests = session.query(Contest.id).all()
+                contest_ids = {c[0] for c in contests}
+                return contest_ids
         except Exception as e:
             logger.error("Failed to fetch contest IDs from DB: %s", e)
             return set()
