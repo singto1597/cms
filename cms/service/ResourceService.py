@@ -33,15 +33,12 @@ import sys
 import time
 from collections import defaultdict, deque
 from shlex import quote as shell_quote
-import time
+
 import psutil
 from gevent import subprocess
 
 from cms import config, get_safe_shard, ServiceCoord
 from cms.io import Service, rpc_method
-
-from cms.db import SessionGen, Contest
-from sqlalchemy import select
 
 
 logger = logging.getLogger(__name__)
@@ -253,29 +250,12 @@ class ResourceService(Service):
             if proc is None or not proc.is_running():
                 # We give contest_id even if the service doesn't need
                 # it, since it causes no trouble.
-
-                active_contest_ids = self._get_active_contest_ids()
-
                 logger.info("Restarting (%s, %s)...",
                             service.name, service.shard)
                 command = os.path.join(BIN_PATH, "cms%s" % service.name)
-
-
                 args = [command, "%d" % service.shard]
-
-                contest_specific_services = ["ContestWebServer", "ProxyService", "EvaluationService"]
-
                 if self.contest_id is not None:
-                    if service.name in contest_specific_services:
-                        target_contest_id = service.shard + 1 
-                        
-                        # *** ตรวจสอบว่า target_contest_id มีอยู่จริงใน Database หรือไม่ ***
-                        if target_contest_id in active_contest_ids:
-                            logger.info("Auto-mapping %s Shard %d to Active Contest ID %d",
-                                        service.name, service.shard, target_contest_id)
-                            args += ["-c", str(target_contest_id)]
-                        else:
-                            continue
+                    args += ["-c", str(self.contest_id)]
                 else:
                     args += ["-c", "ALL"]
                 try:
@@ -499,13 +479,3 @@ class ResourceService(Service):
                     service.name, service.shard, self._will_restart[service])
 
         return self._will_restart[service]
-    def _get_active_contest_ids(self):
-        """ดึง ID ของการแข่งขันทั้งหมดที่มีอยู่ในระบบจาก Database"""
-        try:
-            with SessionGen() as session:
-                contests = session.query(Contest.id).all()
-                contest_ids = {c[0] for c in contests}
-                return contest_ids
-        except Exception as e:
-            logger.error("Failed to fetch contest IDs from DB: %s", e)
-            return set()
