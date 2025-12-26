@@ -48,6 +48,8 @@ services:
       # *** สำคัญ: รับไฟล์ Static ที่แชร์มาจาก CMS ***
       - cms_static_files:/var/www/static:ro
       - ../config-data/html:/var/www/html:ro
+
+      - ../my_static:/var/www/static:ro
     networks:
       - cms-net
 
